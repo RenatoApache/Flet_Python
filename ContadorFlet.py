@@ -15,7 +15,7 @@ def main(pagina: ft.Page):
     #criar os itens que queremos na pagina
     botao_menos = ft.IconButton(ft.icons.REMOVE, on_click=diminuir)
     caixa_texto = ft.TextField(value="0", width=100, text_align=ft.TextAlign.CENTER)
-    botao_mais  = ft.IconButton(ft.icons.ADD, on_click=somar)
+    botao_mais  = ft.TextButton(text="Text button", on_click=somar)
 
     #adicionar os itens na pagina
     pagina.add(
