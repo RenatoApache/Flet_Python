@@ -6,7 +6,7 @@ def main(page):
         if not entrada_nome.value:
             entrada_nome.error_text = "Por favor preencha o seu nome!"
             page.update()#Função para limpar a pagina            
-        if not entrada_nome.value:
+        elif not entrada_senha.value:
             entrada_senha.error_text = "Campo de senha obrigatório."
             page.update()
         else:

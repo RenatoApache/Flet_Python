@@ -11,4 +11,4 @@ def app(page: ft.Page):
     page.add(
         ft.Text("Pressione qualquer tecla ou uma combinação de teclas(CTR, SHIFT, ALT, META)...")
     )
-ft.app(target=app)
+ft.app(target=app, view=ft.WEB_BROWSER, assets_dir="assets")
