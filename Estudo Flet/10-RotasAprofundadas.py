@@ -18,17 +18,21 @@ def main(page: Page): # Define a função principal 'main' que recebe a página 
 
         if page.route == "/loja":
             page.views.append(
-              View(
+                View(
                   "/loja",
                   [
-                      AppBar(title=Text("Loja"), bgcolor==colors.SURFACE_VARIANT),
-                      ElevatedButton("Pagina Inicial", on_click==lambda _: page.route("/"))
+                      AppBar(title=Text("Loja"), bgcolor=colors.SURFACE_VARIANT),
+                      ElevatedButton("Pagina Inicial", on_click=lambda _: page.route("/"))
                   ]
-              )  
+                )  
             )
+        
         page.update()
 
-        
+        def view_pop (view):
+            page.views.pop()
+            top_view = page.viwes[-1]
+            page.go(top_view.route)        
 
     page.on_route_change = mudanca_de_rota
 app(target=main, view=WEB_BROWSER) # Inicia a aplicação Flet com a função 'main' como alvo e visualização no navegador
