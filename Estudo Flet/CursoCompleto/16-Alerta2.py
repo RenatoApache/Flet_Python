@@ -19,6 +19,7 @@ def main(page: Page):
 
     page.banner=Banner(
         bgcolor=colors.AMBER_900,
+        leading=Icon(icons.WARNING_OUTLINED),
         content=Text("Já temos uma atualização para esssa sua aplicação disponivel, gostaria de atualizar agora?"),
         actions=[
             TextButton("Atualizar agora", on_click=atualizar_agora),
