@@ -29,8 +29,28 @@ class TodoApp(UserControl):
         return Column(
             width=600,
             controls=[
-                Row([Text(value="Tarefas", style="headlineMedium")])
-            ]
+                #Titulo da aplicação
+                Row([Text(value="Tarefas", style="headlineMedium")], alignment="center"),
+                Row(controls = [self.new_task, FloatingActionButton(icon=icons.add, on_click = self.add_clicked),],),
+                Column(
+                    spacing=20,
+                    controls=[
+                        self.filter,
+                        self.tasks,
+                        Row(
+                            alignment="spaceBetween",
+                            vertical_alignment="center",
+                            controls=[
+                                self.items_left,
+                                OutlinedButton(
+                                    text="Limpar as tarefas completadas".upper(),
+                                    on_click=self.clear_clicked,
+                                ),
+                            ],
+                        ),
+                    ],
+                ),
+            ],
         )
 
     def add_clicked(self):
