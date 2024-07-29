@@ -8,8 +8,8 @@ from flet import(
     OutlinedButton,
     Page,
     Row,
-    Tabs,
     Tab,
+    Tabs,    
     Text,
     TextField,
     UserControl,
@@ -28,7 +28,7 @@ class Task(UserControl):
 
     def build(self):
         self.display_task = Checkbox(
-            value = False, label=self.task_name, on_change=self.task_status_change
+            value = False, label=self.task_name, on_change=self.status_changed
         )
 
         self.edit_name = TextField(expand=1) #Entrada de texto da edição tarefa
@@ -63,10 +63,11 @@ class Task(UserControl):
             alignment="spaceBetween",
             vertical_alignment = "center",
             controls=[
+            self.edit_name,
                 IconButton(
-                    icons=icons.DONE_OUTLINE_OUTLINED,
+                    icon=icons.DONE_OUTLINE_OUTLINED,
                     icon_color=colors.GREEN,
-                    Tooltip="Atualizar tarefa",
+                    tooltip="Atualizar tarefa",
                     on_click=self.save_clicked,
                 )
             ]
@@ -74,24 +75,28 @@ class Task(UserControl):
         return Column(controls=[self.display_view, self.edit_view])
     
     def edit_clicked(self, e):
-        self.edit_name.values=self.display_task.label
+        self.edit_name.value=self.display_task.label
         self.display_view.visible=False
-        self.edit_name.visible = True
+        self.edit_view.visible = True
         self.update()
 
-    def save_clicked(self):
+    
+    def save_clicked(self, e):
         self.display_task.label=self.edit_name.value
         self.display_view.visible=True
         self.edit_view.visible=False
         self.update()
 
     
-    def delete_clicked(self):
+    def delete_clicked(self, e):
         self.task_delete(self)
 
-    def status_change(self):
-        self.completed=self.display_task.values()
+    def status_changed(self, e):
+        self.completed=self.display_task.value
         self.task_status_change(self)
+
+
+
 
 #Classe da aplicação toda
 class TodoApp(UserControl):
@@ -100,8 +105,8 @@ class TodoApp(UserControl):
         self.new_task = TextField(
             hint_text="Escreva a tarefa para adicionar!",
             expand=True,
-            on_submit=self.add_clicked,
-        ) 
+            on_submit=self.add_clicked,)
+         
         self.tasks = Column()
 
         self.filter = Tabs(
@@ -152,7 +157,7 @@ class TodoApp(UserControl):
             task=Task(self.new_task.value, self.task_status_change, self.task_delete)
             self.tasks.controls.append(task)
             self.new_task.value=""
-            self.new.task.focus()
+            self.new_task.focus()
             self.update()
 
 
@@ -169,7 +174,7 @@ class TodoApp(UserControl):
     
     def clear_clicked(self, e):
         for task in self.tasks.controls[:]:
-            if task.conpleted:
+            if task.completed:
                 self.task_delete(task)
 
     def update(self):
@@ -178,14 +183,20 @@ class TodoApp(UserControl):
         for task in self.tasks.controls:
             task.visible= (
                 status == "Todas tarefas"
-                or (status == "tarefas ativas" and task.completed == False)
-                or (status == "tarefas completas" and task.completed)
+                or (status == "Tarefas ativas" and task.completed == False)
+                or (status == "Tarefas completadas" and task.completed)
             )
             if not task.completed:
                 count += 1
             self.items_left.value=f"{count} tarefa(s) adicionadas"
             super().update()
-                 
+
+
+
+
+
+
+
 #Funcção principal da aplicação
 def main(page: Page):
     page.title = "Tarefas"
