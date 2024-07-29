@@ -1,12 +1,27 @@
 '''criando um projeto de lista de tarefas usando flet'''
 import flet
-from flet import *
+from flet import(
+    Checkbox,
+    Column,
+    FloatingActionButton,
+    IconButton,
+    OutlinedButton,
+    Page,
+    Row,
+    Tabs,
+    Tab,
+    Text,
+    TextField,
+    UserControl,
+    colors,
+    icons,
+)#Importacao dos componentes que vao se usar na aplicacao
 
 #Classe de tarefa
 class Task(UserControl):
     def __init__(self, task_name, task_status_change, task_delete):
         super().__init__()
-        self,completed = False
+        self.completed = False
         self.task_name = task_name
         self.task_status_change = task_status_change
         self.task_delete = task_delete
@@ -49,7 +64,7 @@ class Task(UserControl):
             vertical_alignment = "center",
             controls=[
                 IconButton(
-                    icons=icons.DENE_OUTLINE_OUTLINED,
+                    icons=icons.DONE_OUTLINE_OUTLINED,
                     icon_color=colors.GREEN,
                     Tooltip="Atualizar tarefa",
                     on_click=self.save_clicked,
@@ -70,6 +85,7 @@ class Task(UserControl):
         self.edit_view.visible=False
         self.update()
 
+    
     def delete_clicked(self):
         self.task_delete(self)
 
@@ -80,24 +96,35 @@ class Task(UserControl):
 #Classe da aplicação toda
 class TodoApp(UserControl):
     def build(self):
+
         self.new_task = TextField(
             hint_text="Escreva a tarefa para adicionar!",
-            expand=True
+            expand=True,
+            on_submit=self.add_clicked
         )
-        self.task = Column()
+        self.tasks = Column()
 
         self.filter = Tabs(
             selected_index = 0,
             on_change = self.tabs_changed,
-            tabs = [Tab(text="Todas tarefas"), Tab(text="Tarefas ativas"), Tab(text="Tarefas concluidas"),]
+            tabs=[Tab(text="Todas tarefas"), Tab(text="Tarefas ativas"), Tab(text="Tarefas completadas"),]
         )
+
+        self.items_left = Text("0 tarefas adicionadas")
 
         return Column(
             width=600,
             controls=[
                 #Titulo da aplicação
-                Row([Text(value="Tarefas", style="headlineMedium")], alignment="center"),
-                Row(controls = [self.new_task, FloatingActionButton(icon=icons.ADD, on_click = self.add_clicked),],),
+                Row([Text(value="Tarefas", 
+                          style="headlineMedium")], alignment="center"),
+                Row(
+                    #Input das tarefas
+                    controls = [
+                        self.new_task, 
+                        FloatingActionButton(icon=icons.ADD, on_click = self.add_clicked),
+                    ],
+                ),
                 Column(
                     spacing=20,
                     controls=[
@@ -114,6 +141,7 @@ class TodoApp(UserControl):
                                 ),
                             ],
                         ),
+
                     ],
                 ),
             ],
@@ -128,23 +156,33 @@ class TodoApp(UserControl):
             self.update()
 
     def task_status_change(self, task):
-        pass
+        self.update()
 
     def task_delete(self, task):
-        pass
+        self.tasks.controls.remove(task)
+        self.update()
 
-    def tab_changed(self, e):
-        pass
+    def tabs_changed(self, e):
+        self.update()
     
     def clear_clicked(self, e):
-        pass
+        for task in self.tasks.controls[:]:
+            if task.conpleted:
+                self.task_delete(task)
 
     def update(self):
         status=self.filter.tabs[self.filter.selected_index].text
         count=0
         for task in self.task.controls:
-            status=="Todas tarefas"
-            or (status=="tarefae ativas" and task.completed)
+            task.visible=(
+                status=="Todas tarefas"
+                or (status=="tarefae ativas" and task.completed==False)
+                or (status=="tarefas completadas" and task.completed)
+            )
+            if not task.completed:
+                count+=1
+            self.items_left.valur=f"{count} tarefa(s) pendentes"
+            super().update()
                  
 #Funcção principal da aplicação
 def main(page:Page):
