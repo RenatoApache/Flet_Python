@@ -48,7 +48,7 @@ class Task(UserControl):
                             icon_color=colors.GREEN,
                         ),
                         IconButton(
-                            icon=icons.Delete_OUTLINED,
+                            icon=icons.DELETE_OUTLINED,
                             tooltip="Deletar tarefa", #Texto de orientação
                             on_click=self.delete_clicked,
                             icon_color=colors.RED,
@@ -100,8 +100,8 @@ class TodoApp(UserControl):
         self.new_task = TextField(
             hint_text="Escreva a tarefa para adicionar!",
             expand=True,
-            on_submit=self.add_clicked
-        )
+            on_submit=self.add_clicked,
+        ) 
         self.tasks = Column()
 
         self.filter = Tabs(
@@ -117,7 +117,7 @@ class TodoApp(UserControl):
             controls=[
                 #Titulo da aplicação
                 Row([Text(value="Tarefas", 
-                          style="headlineMedium")], alignment="center"),
+                          style="headlineMedium")], alignment= "center"),
                 Row(
                     #Input das tarefas
                     controls = [
@@ -155,6 +155,8 @@ class TodoApp(UserControl):
             self.new.task.focus()
             self.update()
 
+
+
     def task_status_change(self, task):
         self.update()
 
@@ -171,24 +173,24 @@ class TodoApp(UserControl):
                 self.task_delete(task)
 
     def update(self):
-        status=self.filter.tabs[self.filter.selected_index].text
+        status = self.filter.tabs[self.filter.selected_index].text
         count=0
-        for task in self.task.controls:
-            task.visible=(
-                status=="Todas tarefas"
-                or (status=="tarefae ativas" and task.completed==False)
-                or (status=="tarefas completadas" and task.completed)
+        for task in self.tasks.controls:
+            task.visible= (
+                status == "Todas tarefas"
+                or (status == "tarefas ativas" and task.completed == False)
+                or (status == "tarefas completas" and task.completed)
             )
             if not task.completed:
-                count+=1
-            self.items_left.valur=f"{count} tarefa(s) pendentes"
+                count += 1
+            self.items_left.value=f"{count} tarefa(s) adicionadas"
             super().update()
                  
 #Funcção principal da aplicação
-def main(page:Page):
-    page.title="Tarefas"
-    page.horizontal_alignment="center"
-    page.scroll="adaptative"
+def main(page: Page):
+    page.title = "Tarefas"
+    page.horizontal_alignment = "center"
+    page.scroll = "adaptive"
     page.update()
     
     app = TodoApp()
